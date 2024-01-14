@@ -51,8 +51,6 @@ export default function ProductIndex() {
           <section className="container d-flex flex-row justify-content-around px-4 px-lg-5 mt-5">
               <div className="flex-fill">
 
-
-
                   {
                       token && (
                           <div className="dropdown">
