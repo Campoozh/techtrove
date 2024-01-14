@@ -3,7 +3,6 @@ import {Modal} from "react-bootstrap";
 import {PurchaseHistoryContext} from "../../contexts/PurchaseHistoryContext";
 import {PurchaseHistoryModalProps, PurchaseHistoryProduct} from "../../types/PurchaseHistory";
 import {Product} from "../../types/Product";
-import {XLg} from "react-bootstrap-icons";
 
 function PurchaseHistoryModal({show, handleClose}: PurchaseHistoryModalProps) {
 

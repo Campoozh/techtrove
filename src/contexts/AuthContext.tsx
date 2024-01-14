@@ -24,7 +24,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
             })
             .catch(error => {
                 if(error.response.status === 400) setResponseMessage("Invalid credentials. Pleasy verify.")
-                /* response feita de uma maneira diferente da "/register"? */
             });
     }
 

@@ -30,7 +30,6 @@ export default function ProductIndex() {
           else productsData = await fetchProducts()
 
           if (token) setCategories(await fetchCategories())
-          /* Contando que o user é ADMIN, porque na request de login a ROLE não vem na payload */
 
           setProducts(productsData)
       })();
@@ -52,10 +51,7 @@ export default function ProductIndex() {
           <section className="container d-flex flex-row justify-content-around px-4 px-lg-5 mt-5">
               <div className="flex-fill">
 
-                  {/*
-                        Como o endpoint das categorias necessita de JWT,
-                        apenas tornei possível filtrar por categoria se estiver na conta.
-                  */}
+
 
                   {
                       token && (
