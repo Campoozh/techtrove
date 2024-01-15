@@ -4,6 +4,6 @@ import {AuthContext} from "../../contexts/AuthContext";
 
 export const AuthMiddleware = (props: any) =>  {
     const {token} = useContext(AuthContext)
-    return token ? props.element : <Navigate to="/auth" />;
+    return token ? props.element : <Navigate to="/login" />;
 }
 

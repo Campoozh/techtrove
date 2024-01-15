@@ -8,6 +8,11 @@ export const PurchaseHistoryContext = createContext({} as PurchaseHistoryContext
 
 export function PurchaseHistoryContextProvider({children}: ContextProviderProps) {
 
+    /*
+    *  Local Storage porque aparentemente não é possível conseguir
+    *  o ID do user
+    * */
+
     const localStoragePurchaseHistory = localStorage.getItem('purchaseHistory')
     const [products, setProducts] = useState<Product[]>([])
     const [purchaseHistory, setPurchaseHistory] = useState<PurchaseHistoryProduct[]>(

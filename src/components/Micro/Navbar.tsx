@@ -19,6 +19,7 @@ function Navbar() {
     const navigate = useNavigate();
     const logout = () => {
         signOut()
+        window.location.reload()
         navigate('/')
     }
     const cart = getCart();
@@ -70,8 +71,8 @@ function Navbar() {
                                 </button>
                             </>
                             :
-                            <Link to={"/auth"} className="btn btn-outline-dark" type="submit">
-                    <Person/>
+                            <Link to={"/login"} className="btn btn-outline-dark" type="submit">
+                                <Person/>
                             </Link>
                         }
                     </div>

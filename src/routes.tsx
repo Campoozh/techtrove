@@ -5,9 +5,11 @@ import {ProductEdit} from "./components/Product/Edit";
 import {AuthMiddleware} from "./components/Middlewares/AuthMiddleware";
 import ProductCreate from "./components/Product/Create";
 import ProductIndex from "./components/Product/Index";
-import Auth from "./components/Auth/Index";
+import Auth from "./components/Auth/Register";
 import App from "./App";
 import ProductShow from "./components/Product/Show";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
 
 const router = createBrowserRouter([
     {
@@ -15,8 +17,12 @@ const router = createBrowserRouter([
         element: <App/>
     },
     {
-        path: "/auth",
-        element: <Auth/>,
+        path: "/register",
+        element: <Register />,
+    },
+    {
+        path: "/login",
+        element: <Login />,
     },
     {
         path: "/products",

@@ -18,12 +18,18 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
         await axios.post('http://127.0.0.1:3333/sessions', data)
             .then(res => {
+
                 const token = res.data.token;
                 localStorage.setItem('token', token);
                 setToken(token)
+
             })
             .catch(error => {
-                if(error.response.status === 400) setResponseMessage("Invalid credentials. Pleasy verify.")
+
+                if(error.response.status === 400)
+                    setResponseMessage("Invalid credentials. Pleasy verify.")
+                /* response feita de uma maneira diferente da "/register"? */
+
             });
     }
 
@@ -34,14 +40,18 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
            await axios.post('http://localhost:3333/register', data)
            .then(res => {
-               const token = res.data.token;
-               localStorage.setItem('token', token);
-               setToken(token)
-               setResponseMessage('Utilizador criado com sucesso!')
+
+               // const token = res.data.token;
+               // localStorage.setItem('token', token);
+               // setToken(token)
+               console.log("Registered successfully");
+
             })
             .catch(error => {
+
                 if(error.response.status === 400) setResponseMessage(error.response.data.details[0].message); // Apresenta os erros 1 por vez
-                else setResponseMessage(error.response.data.message)                          
+                else setResponseMessage(error.response.data.message)
+
             });
     }
 
