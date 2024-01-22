@@ -6,7 +6,7 @@ interface AuthProps {
 
 type AuthContextType = {
     token: string;
-    responseMessage?: string;
+    responseMessage: string;
     signIn(props: AuthProps): Promise<void>;
     signUp(props: AuthProps): Promise<void>;
     signOut(): void

@@ -3,12 +3,13 @@ import {createContext, useContext, useState} from "react";
 import { AuthContextType, AuthProps } from "../types/Auth";
 import {CartContext} from "./CartContext";
 import {ContextProviderProps} from "../types/Context";
+import {AuthMessages} from "../api/Error/AuthMessages";
 
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthContextProvider({ children }: ContextProviderProps) {
 
-    const [  , setResponseMessage] = useState('');
+    const [responseMessage, setResponseMessage] = useState('');
     const [token, setToken] = useState(localStorage.getItem('token') || '')
     const {resetCart} = useContext(CartContext)
 
@@ -28,8 +29,7 @@ export function AuthContextProvider({ children }: ContextProviderProps) {
             .catch(error => {
 
                 if(error.response.status === 400)
-                    setResponseMessage("Invalid credentials. Pleasy verify.")
-                /* response feita de uma maneira diferente da "/register"? */
+                    setResponseMessage(AuthMessages.CREDENTIALS)
 
             });
     }
@@ -45,13 +45,23 @@ export function AuthContextProvider({ children }: ContextProviderProps) {
                // const token = res.data.token;
                // localStorage.setItem('token', token);
                // setToken(token)
-               console.log("Registered successfully");
+
+               setResponseMessage(AuthMessages.SIGNED_UP)
 
             })
             .catch(error => {
 
-                if(error.response.status === 400) setResponseMessage(error.response.data.details[0].message); // Apresenta os erros 1 por vez
-                else setResponseMessage(error.response.data.message)
+                switch (error.response.status) {
+                    case 400:
+                        setResponseMessage(AuthMessages.CREDENTIALS);
+                        break;
+                    case 401:
+                        setResponseMessage(AuthMessages.AUTHORIZATION);
+                        break;
+                    default:
+                        setResponseMessage(error.response.data.message)
+                        break;
+                }
 
             });
     }
@@ -62,7 +72,7 @@ export function AuthContextProvider({ children }: ContextProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{ token, signIn, signUp, signOut }} >
+        <AuthContext.Provider value={{ token, responseMessage, signIn, signUp, signOut }} >
             {children}
         </AuthContext.Provider>
     )

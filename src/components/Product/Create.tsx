@@ -1,14 +1,14 @@
 import React, {FormEvent, useEffect, useState} from 'react'
 import {Product} from "../../types/Product";
 import {Category} from "../../types/Category";
+import {ProductMessages} from "../../api/Error/ProductMessages";
 import {createProduct} from "../../api/product";
 import {fetchCategories} from "../../api/category";
-import {processErrorResponse} from "./Errors/errors";
 import {useNavigate} from 'react-router-dom';
 import Navbar from "../Micro/Navbar";
 import Footer from "../Micro/Footer";
+import ResponseMessage from "../ResponseMessage";
 import styles from "../../styles/product/Create.module.css";
-import ResponseMessage from "./Micro/ResponseMessage";
 
 export default function ProductCreate() {
 
@@ -25,8 +25,8 @@ export default function ProductCreate() {
 
     useEffect(() => {
         (async () => {
-                const productsData = await fetchCategories();
-                setCategories(productsData);
+            const productsData = await fetchCategories();
+            setCategories(productsData);
         })();
     }, []);
 
@@ -34,12 +34,28 @@ export default function ProductCreate() {
         event.preventDefault();
         const data: Product = {id: "", title, description, price, image_url: imageUrl, category_id: categoryId}
 
-        createProduct(data).then((res: any) => {
-            if (res.status === 201)
-                navigate('/products', { replace: true, state: { message: 'Product created successfully!' } });
+        createProduct(data)
+            .then((res: any) => {
+                if (res.status === 201) {
 
-            else setResponseMessage(processErrorResponse(res.response.status))
-        })
+                    navigate('/products', {
+                        replace: true, state: { message: ProductMessages.CREATED }
+                    })
+
+                } else {
+                    switch (res.response.status){
+                        case 400:
+                            setResponseMessage(ProductMessages.WRONG_FIELDS);
+                            break;
+                        case 401:
+                            setResponseMessage(ProductMessages.AUTHORIZATION);
+                            break;
+                        default:
+                            setResponseMessage(ProductMessages.UNKNOWN);
+                            break;
+                    }
+                }
+            })
     }
 
     return (

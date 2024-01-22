@@ -22,7 +22,7 @@ function ProductList({searchTerm}: ProductListProps) {
             setProducts(productsData)
             setLoadingProducts(false)
         })();
-    }, [categoryId, products]);
+    }, [categoryId]);
 
 
     if (loadingProducts) return <>Loading products...</>

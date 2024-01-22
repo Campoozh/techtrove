@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {deleteProduct} from "../../api/product";
+import {ProductMessages} from "../../api/Error/ProductMessages";
 
 export function ProductDelete() {
 
@@ -11,8 +12,10 @@ export function ProductDelete() {
     useEffect(() => {
         if (productId) {
             deleteProduct(productId).then((res: any) => {
-                if(res.status === 201) navigate('/products', { replace: true, state: { message: res.data.message }});
-                else navigate('/products', { replace: true, state: { message: "Product not found." }});
+                if(res.status === 201)
+                    navigate('/products',
+                        { replace: true, state: { message: ProductMessages.DELETED }});
+                else navigate('/products', { replace: true, state: { message: ProductMessages.NOT_FOUND }});
             });
         }
     }, [navigate, productId]);

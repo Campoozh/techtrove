@@ -4,9 +4,10 @@ import {Link, useNavigate} from 'react-router-dom';
 import Navbar from '../Micro/Navbar';
 import styles from '../../styles/product/Create.module.css';
 import Footer from '../Micro/Footer';
+import ResponseMessage from "../ResponseMessage";
 
 export default function Login() {
-    const { signIn } = useContext(AuthContext);
+    const { signIn, responseMessage } = useContext(AuthContext);
     const [loginState, setLoginState] = useState({ email: '', password: '' });
     const navigate = useNavigate();
 
@@ -15,7 +16,7 @@ export default function Login() {
     async function handleLoginFormSubmission(event: FormEvent) {
         event.preventDefault();
         await signIn(loginState);
-        // navigate('/');
+        navigate('/');
     }
 
     return (
@@ -44,7 +45,7 @@ export default function Login() {
                                        placeholder="Password" onChange={handleLoginChange}/>
                             </div>
 
-
+                            <ResponseMessage responseMessage={responseMessage}/>
 
                             <div className="form-group text-center mt-4">
                                 <button type="submit" className="btn btn-success" style={{margin: '0 auto'}}>Login

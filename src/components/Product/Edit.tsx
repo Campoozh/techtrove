@@ -6,8 +6,8 @@ import {editProduct, fetchProductByUuid} from "../../api/product";
 import Navbar from "../Micro/Navbar";
 import styles from "../../styles/product/Create.module.css";
 import Footer from "../Micro/Footer";
-import {processErrorResponse} from "./Errors/errors";
-import ResponseMessage from "./Micro/ResponseMessage";
+import ResponseMessage from "../ResponseMessage";
+import {ProductMessages} from "../../api/Error/ProductMessages";
 
 export function ProductEdit() {
 
@@ -49,16 +49,29 @@ export function ProductEdit() {
             ...prevState,
             [name]: name === 'price' ? Number(value) : value
         }));
-        console.log(product)
     }
 
     const handleProductEditFormSubmission = (event: FormEvent) => {
         event.preventDefault();
         editProduct(product).then((res: any) => {
-            if (res.status === 200) navigate('/products', {
-                replace: true, state: { message: 'Product edited successfully!' }
-            });
-            else setResponseMessage(processErrorResponse(res.response.status))
+
+            if (res.status === 200)  {
+                navigate('/products', {
+                    replace: true, state: { message: ProductMessages.UPDATED }
+                });
+            } else   {
+                switch (res.response.status){
+                    case 400:
+                        setResponseMessage(ProductMessages.WRONG_FIELDS);
+                        break;
+                    case 401:
+                        setResponseMessage(ProductMessages.AUTHORIZATION);
+                        break;
+                    default:
+                        setResponseMessage(ProductMessages.UNKNOWN);
+                        break;
+                }
+            }
         });
     }
 

@@ -11,6 +11,10 @@ type ProductListProps = {
     searchTerm: string
 }
 
+type RelatedProductsProps = {
+    product: Product;
+}
+
 type CartProduct = {
     id: string,
     quantity: number,
@@ -19,5 +23,6 @@ type CartProduct = {
 export type {
     Product,
     ProductListProps,
+    RelatedProductsProps,
     CartProduct
 }
