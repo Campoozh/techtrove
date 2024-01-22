@@ -3,6 +3,8 @@ import {PurchaseHistoryContextType, PurchaseHistoryProduct} from "../types/Purch
 import {ContextProviderProps} from "../types/Context";
 import {CartProduct, Product} from "../types/Product";
 import {fetchProducts} from "../api/product";
+import {createOrder, fetchOrdersByUser} from "../api/orders";
+import {Cart} from "react-bootstrap-icons";
 
 export const PurchaseHistoryContext = createContext({} as PurchaseHistoryContextType)
 
@@ -21,8 +23,11 @@ export function PurchaseHistoryContextProvider({children}: ContextProviderProps)
 
     useEffect(() => {
         localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
-        (async () => setProducts(await fetchProducts()))();
+        (async () =>
+                setProducts(await fetchProducts())
+        )();
     }, [purchaseHistory]);
+
 
     function getPurchaseHistory(): PurchaseHistoryProduct[] { return purchaseHistory; }
 
@@ -33,6 +38,15 @@ export function PurchaseHistoryContextProvider({children}: ContextProviderProps)
                 return { id: product.id, quantity: product.quantity, bought_at: new Date().toLocaleString() }
             })
         ]
+
+        const newOrder : {} = products.map(product => ({
+            product_id: product.id,
+            quantity: product.quantity,
+            price: product.price
+        }));
+
+        createOrder(newOrder).then(res => console.log(res));
+
         setPurchaseHistory(newPurchaseHistory)
         return "Products bought with success."; /* example of when the button buy is clicked */
     }
@@ -42,6 +56,7 @@ export function PurchaseHistoryContextProvider({children}: ContextProviderProps)
                 return products.find(product => product.id === productInCart.id)
             }
         ).filter(Boolean) as Product[];
+
         return productsFromPurchaseHistory || [];
     }
 

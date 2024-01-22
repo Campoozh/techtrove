@@ -14,7 +14,6 @@ export default function ProductCreate() {
 
     const [categories, setCategories] = useState<Category[]>([])
     const [responseMessage, setResponseMessage] = useState("")
-
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState(0)
@@ -37,11 +36,9 @@ export default function ProductCreate() {
         createProduct(data)
             .then((res: any) => {
                 if (res.status === 201) {
-
                     navigate('/products', {
                         replace: true, state: { message: ProductMessages.CREATED }
                     })
-
                 } else {
                     switch (res.response.status){
                         case 400:

@@ -1,16 +1,14 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Product} from '../../types/Product';
 import {Category} from "../../types/Category";
+import React, {useContext, useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 import {fetchCategories} from "../../api/category";
 import Navbar from "../Micro/Navbar";
 import Footer from "../Micro/Footer";
-import {Link, Outlet, useSearchParams} from 'react-router-dom';
-import {XLg} from "react-bootstrap-icons";
-import '../../styles/product/index.css'
-import {fetchProducts, fetchProductsByCategory} from "../../api/product";
-import {AuthContext} from "../../contexts/AuthContext";
 import ProductList from "./Micro/ProductList";
+import {Link, Outlet} from 'react-router-dom';
+import {XLg} from "react-bootstrap-icons";
+import {AuthContext} from "../../contexts/AuthContext";
+import '../../styles/product/index.css'
 
 export default function ProductIndex() {
 

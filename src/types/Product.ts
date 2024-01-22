@@ -18,6 +18,7 @@ type RelatedProductsProps = {
 type CartProduct = {
     id: string,
     quantity: number,
+    price: number
 }
 
 export type {

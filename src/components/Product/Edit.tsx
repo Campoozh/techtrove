@@ -1,13 +1,13 @@
 import React, {FormEvent, useEffect, useState} from 'react';
-import {useNavigate, useSearchParams} from "react-router-dom";
 import {Category} from "../../types/Category";
+import {ProductMessages} from "../../api/Error/ProductMessages";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {fetchCategories} from "../../api/category";
 import {editProduct, fetchProductByUuid} from "../../api/product";
 import Navbar from "../Micro/Navbar";
-import styles from "../../styles/product/Create.module.css";
 import Footer from "../Micro/Footer";
 import ResponseMessage from "../ResponseMessage";
-import {ProductMessages} from "../../api/Error/ProductMessages";
+import styles from "../../styles/product/Create.module.css";
 
 export function ProductEdit() {
 
@@ -31,14 +31,7 @@ export function ProductEdit() {
             setCategories(productsData);
             if (productId) {
                 const productResponse = await fetchProductByUuid(productId);
-                setProduct({
-                    id: productResponse.id,
-                    title: productResponse.title,
-                    description: productResponse.description,
-                    price: productResponse.price,
-                    image_url: productResponse.image_url,
-                    category_id: productResponse.category_id
-                });
+                setProduct({...productResponse});
             }
         })();
     }, [productId]);

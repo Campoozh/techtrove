@@ -2,7 +2,6 @@ import axios from "axios";
 import {Product} from "../types/Product";
 
 const token = localStorage.getItem("token")
-
 const requestConfig = { headers: {
         "Authorization": `Bearer ${token}`,
         "Content-type": "application/json",
@@ -53,7 +52,6 @@ export const deleteProduct = async (productId: string) => {
 }
 
 export const editProduct = async (payload: Product) => {
-    console.log(payload)
     try {
         return await axios.put(`http://localhost:3333/products/${payload.id}`,
             payload,

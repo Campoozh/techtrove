@@ -26,20 +26,13 @@ function ProductShow() {
         (async () => {
             if (productId) {
                 const productResponse = await fetchProductByUuid(productId);
-                setProduct({
-                    id: productResponse.id,
-                    title: productResponse.title,
-                    description: productResponse.description,
-                    price: productResponse.price,
-                    image_url: productResponse.image_url,
-                    category_id: productResponse.category_id
-                });
+                setProduct({...productResponse});
             }
         })();
     }, [productId]);
 
     const addToCart = () => {
-        const message = addProductToCart(product.id, quantity);
+        const message = addProductToCart(product.id, quantity, product.price);
         setMessage(message)
     }
 

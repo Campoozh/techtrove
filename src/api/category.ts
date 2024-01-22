@@ -8,4 +8,5 @@ export const fetchCategories = async () => {
         }
     });
     return response.data;
+    
 }

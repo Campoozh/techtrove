@@ -60,7 +60,7 @@ function PurchaseHistoryModal({show, handleClose}: PurchaseHistoryModalProps) {
                                 if (purchasedHistoryItem?.bought_at) boughtAt = formatDate(purchasedHistoryItem?.bought_at)
 
                                 return (
-                                    <div className="d-flex justify-content-between my-3">
+                                    <div key={product.id} className="d-flex justify-content-between my-3">
                                         <div className="d-flex align-items-center px-3">
                                             <img src={product.image_url} alt={product.title} width="50px" height="50px"/>
                                         </div>

@@ -30,9 +30,9 @@ export function CartContextProvider({children}: ContextProviderProps) {
         return productsInCart || [];
     }
 
-    function addProductToCart(productId: string, quantity: number): string  {
+    function addProductToCart(productId: string, quantity: number, price: number): string  {
         if (!isProductInCart(productId)) {
-            setCart([...cart, {id: productId, quantity: quantity}]);
+            setCart([...cart, { id: productId, quantity: quantity, price: price }]);
             return "Product added to cart successfully."
         } else return "Product already in cart."
     }
@@ -44,10 +44,10 @@ export function CartContextProvider({children}: ContextProviderProps) {
         } else return "Product was not found in your cart."
     }
 
-    function updateProductQuantity(productId: string, newQuantity: number): string {
+    function updateProductQuantity(productId: string, newQuantity: number, newPrice: number): string {
         if (isProductInCart(productId)) {
             const updatedCart = cart.map(product =>
-                product.id === productId ? { id: productId, quantity: newQuantity } : product
+                product.id === productId ? { id: productId, quantity: newQuantity, price: newPrice } : product
             )
             setCart(updatedCart);
             return "Product updated successfully"
