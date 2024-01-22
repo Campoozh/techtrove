@@ -3,21 +3,24 @@ import {Product} from "../../types/Product";
 import {Category} from "../../types/Category";
 import {createProduct} from "../../api/product";
 import {fetchCategories} from "../../api/category";
-import {processErrorResponse} from "./errors";
+import {processErrorResponse} from "./Errors/errors";
 import {useNavigate} from 'react-router-dom';
 import Navbar from "../Micro/Navbar";
 import Footer from "../Micro/Footer";
 import styles from "../../styles/product/Create.module.css";
+import ResponseMessage from "./Micro/ResponseMessage";
 
 export default function ProductCreate() {
 
     const [categories, setCategories] = useState<Category[]>([])
     const [responseMessage, setResponseMessage] = useState("")
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState(0)
     const [imageUrl, setImageUrl] = useState("")
     const [categoryId, setCategoryId] = useState("")
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,8 +35,9 @@ export default function ProductCreate() {
         const data: Product = {id: "", title, description, price, image_url: imageUrl, category_id: categoryId}
 
         createProduct(data).then((res: any) => {
-            if (res.status === 201) navigate('/products', {
-                replace: true, state: { message: 'Product created successfully!' }});
+            if (res.status === 201)
+                navigate('/products', { replace: true, state: { message: 'Product created successfully!' } });
+
             else setResponseMessage(processErrorResponse(res.response.status))
         })
     }
@@ -87,6 +91,8 @@ export default function ProductCreate() {
                                 ))}
                             </select>
                         </div>
+
+                        <ResponseMessage responseMessage={responseMessage}/>
 
                         <div className="form-group text-center mt-4">
                             <button type="submit" className="btn btn-success" style={{margin: "0 auto"}}>Create Product</button>

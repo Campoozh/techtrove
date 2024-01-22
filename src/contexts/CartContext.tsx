@@ -1,11 +1,12 @@
 import React, {createContext, useEffect, useState} from "react";
 import {CartProduct, Product} from "../types/Product";
 import {fetchProducts} from "../api/product";
-import {CartContextProviderProps, CartContextType} from "../types/Cart";
+import {CartContextType} from "../types/Cart";
+import {ContextProviderProps} from "../types/Context";
 
 export const CartContext = createContext({} as CartContextType);
 
-export function CartContextProvider({children}: CartContextProviderProps) {
+export function CartContextProvider({children}: ContextProviderProps) {
 
     const localStorageCart = localStorage.getItem("cart");
     const [cart, setCart] = useState<CartProduct[]>(() =>

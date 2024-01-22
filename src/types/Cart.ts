@@ -1,9 +1,4 @@
-import {ReactNode} from "react";
 import {CartProduct, Product} from "./Product";
-
-type CartContextProviderProps = {
-    children: ReactNode,
-};
 
 type CartContextType = {
     getCart: () => CartProduct[],
@@ -22,7 +17,6 @@ type CartModalProps = {
 }
 
 export type {
-    CartContextProviderProps,
     CartContextType,
     CartModalProps
 }

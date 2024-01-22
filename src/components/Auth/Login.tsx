@@ -15,7 +15,7 @@ export default function Login() {
     async function handleLoginFormSubmission(event: FormEvent) {
         event.preventDefault();
         await signIn(loginState);
-        navigate('/');
+        // navigate('/');
     }
 
     return (
@@ -43,10 +43,15 @@ export default function Login() {
                                 <input type="password" name="password" className="form-control" id="loginPasswordInput"
                                        placeholder="Password" onChange={handleLoginChange}/>
                             </div>
+
+
+
                             <div className="form-group text-center mt-4">
                                 <button type="submit" className="btn btn-success" style={{margin: '0 auto'}}>Login
                                 </button>
                             </div>
+
+
                         </form>
                     </div>
                 </div>

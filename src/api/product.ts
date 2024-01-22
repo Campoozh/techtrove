@@ -35,7 +35,7 @@ export const createProduct = async (payload: Product) => {
     try {
         return await axios.post('http://localhost:3333/products',
            payload,
-            requestConfig,
+           requestConfig,
         );
     } catch (error) {
        return error;

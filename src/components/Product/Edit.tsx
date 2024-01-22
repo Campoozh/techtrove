@@ -6,9 +6,12 @@ import {editProduct, fetchProductByUuid} from "../../api/product";
 import Navbar from "../Micro/Navbar";
 import styles from "../../styles/product/Create.module.css";
 import Footer from "../Micro/Footer";
+import {processErrorResponse} from "./Errors/errors";
+import ResponseMessage from "./Micro/ResponseMessage";
 
 export function ProductEdit() {
 
+    const [responseMessage, setResponseMessage] = useState("")
     const [categories, setCategories] = useState<Category[]>([])
     const [product, setProduct] = useState({
         id: '',
@@ -40,8 +43,8 @@ export function ProductEdit() {
         })();
     }, [productId]);
 
-    const onChangeProductAttribute = (e: any) => {
-        const { name, value } = e.target;
+    const onChangeProductAttribute = (event: any) => {
+        const { name, value } = event.target;
         setProduct(prevState => ({
             ...prevState,
             [name]: name === 'price' ? Number(value) : value
@@ -55,7 +58,7 @@ export function ProductEdit() {
             if (res.status === 200) navigate('/products', {
                 replace: true, state: { message: 'Product edited successfully!' }
             });
-            else console.error(res)
+            else setResponseMessage(processErrorResponse(res.response.status))
         });
     }
 
@@ -108,6 +111,9 @@ export function ProductEdit() {
                                 ))}
                             </select>
                         </div>
+
+                        <ResponseMessage responseMessage={responseMessage}/>
+
                         <div className="form-group text-center mt-4">
                             <button type="submit" className="btn btn-success" style={{margin: "0 auto"}}>Edit Product</button>
                         </div>

@@ -7,6 +7,10 @@ type Product = {
     category_id: string,
 }
 
+type ProductListProps = {
+    searchTerm: string
+}
+
 type CartProduct = {
     id: string,
     quantity: number,
@@ -14,5 +18,6 @@ type CartProduct = {
 
 export type {
     Product,
+    ProductListProps,
     CartProduct
 }

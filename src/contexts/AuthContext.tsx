@@ -1,13 +1,14 @@
 import axios  from "axios";
 import {createContext, useContext, useState} from "react";
-import { AuthContextProviderProps, AuthContextType, AuthProps } from "../types/Auth";
+import { AuthContextType, AuthProps } from "../types/Auth";
 import {CartContext} from "./CartContext";
+import {ContextProviderProps} from "../types/Context";
 
 export const AuthContext = createContext({} as AuthContextType);
 
-export function AuthContextProvider({ children }: AuthContextProviderProps) {
+export function AuthContextProvider({ children }: ContextProviderProps) {
 
-    const [responseMessage, setResponseMessage] = useState('');
+    const [  , setResponseMessage] = useState('');
     const [token, setToken] = useState(localStorage.getItem('token') || '')
     const {resetCart} = useContext(CartContext)
 
@@ -61,7 +62,7 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{ token, responseMessage, signIn, signUp, signOut }} >
+        <AuthContext.Provider value={{ token, signIn, signUp, signOut }} >
             {children}
         </AuthContext.Provider>
     )
