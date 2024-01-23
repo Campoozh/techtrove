@@ -1,24 +1,19 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Modal} from "react-bootstrap";
 import {PurchaseHistoryContext} from "../../contexts/PurchaseHistoryContext";
-import {PurchaseHistoryModalProps, PurchaseHistoryProduct} from "../../types/PurchaseHistory";
-import {Product} from "../../types/Product";
+import {OrderedProducts, PurchaseHistoryModalProps} from "../../types/PurchaseHistory";
 
 function PurchaseHistoryModal({show, handleClose}: PurchaseHistoryModalProps) {
 
-    const { getPurchaseHistory ,getProductsFromPurchaseHistory } = useContext(PurchaseHistoryContext);
-    const [purchasedProducts, setPurchasedProducts] = useState<Product[]>([])
-    const [purchasedHistory, setPurchasedHistory] = useState<PurchaseHistoryProduct[]>([])
+    const { orders, getProductsFromPurchaseHistory } = useContext(PurchaseHistoryContext);
+    const [orderedProducts, setOrderedProducts] = useState<OrderedProducts[]>([])
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
 
-        setPurchasedProducts(getProductsFromPurchaseHistory()); // products in cart
-        setPurchasedHistory(getPurchaseHistory()); // info (img, category, etc) of products in carts
+        setOrderedProducts(getProductsFromPurchaseHistory());
 
-    }, [getProductsFromPurchaseHistory, getPurchaseHistory]);
-
-    console.log(purchasedProducts)
+    }, [orders, getProductsFromPurchaseHistory]);
 
     return (
         <>
@@ -43,24 +38,23 @@ function PurchaseHistoryModal({show, handleClose}: PurchaseHistoryModalProps) {
                             }/>
                         </div>
                     </div>
-                    {purchasedProducts.length > 0 ? purchasedProducts
+                    {orderedProducts.length > 0 ?
+                        orderedProducts
                             .filter(product =>
-                                product.title.toUpperCase().includes(searchTerm.toUpperCase())
+                                product.title && product.title.toUpperCase().includes(searchTerm.toUpperCase())
                             )
                             .map(((product, index) => {
-                                const purchasedHistoryItem = purchasedHistory.find(purchasedHistoryProduct => purchasedHistoryProduct.product_id === product.id);
-
                                 return (
-                                    <div key={product.id} className="d-flex justify-content-between my-3">
+                                    <div key={index} className="d-flex justify-content-between my-3">
                                         <div className="d-flex align-items-center px-3">
                                             <img src={product.image_url} alt={product.title} width="50px" height="50px"/>
                                         </div>
                                         <div className="w-75">
                                             {product.title}
-                                            <p>Quantity: {purchasedHistoryItem?.quantity} pieces</p>
+                                            <p>Quantity: {product.quantity} pieces</p>
                                         </div>
                                         <div className="d-flex align-items-center justify-content-start px-3">
-                                           Total: ${purchasedHistoryItem?.price}
+                                           ${product.price}
                                         </div>
                                     </div>
                                 )

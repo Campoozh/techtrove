@@ -1,9 +1,9 @@
 import {CartProduct, Product} from "./Product";
 
 type PurchaseHistoryContextType = {
-    getPurchaseHistory: () => PurchaseHistoryProduct[],
+    orders: any,
     addProductsToPurchaseHistory: (products: CartProduct[]) => string,
-    getProductsFromPurchaseHistory: () => Product[],
+    getProductsFromPurchaseHistory: () => any,
 };
 
 type PurchaseHistoryProduct = {
@@ -11,6 +11,14 @@ type PurchaseHistoryProduct = {
     product_id: string,
     quantity: number,
     price: number,
+}
+
+type OrderedProducts = {
+    id: string,
+    title: string,
+    image_url: string,
+    price: number,
+    quantity: number
 }
 
 type PurchaseHistoryModalProps = {
@@ -21,5 +29,6 @@ type PurchaseHistoryModalProps = {
 export type {
     PurchaseHistoryContextType,
     PurchaseHistoryProduct,
-    PurchaseHistoryModalProps
+    PurchaseHistoryModalProps,
+    OrderedProducts
 }

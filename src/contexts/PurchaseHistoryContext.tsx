@@ -17,13 +17,12 @@ export function PurchaseHistoryContextProvider({children}: ContextProviderProps)
 
     useEffect(() => {
         (async () => {
-
             const fetchedOrders = await fetchOrdersByUser().then(res => {
                 return res.orders.flatMap((order: any) =>
                     order.orderItem.map((item: any) => ({
                         id: order.id,
                         product_id: item.product_id,
-                        price: item.price,
+                        price: item.price / 100,
                         quantity: item.quantity
                     }))
                 );
@@ -32,51 +31,55 @@ export function PurchaseHistoryContextProvider({children}: ContextProviderProps)
             localStorage.setItem("orders", JSON.stringify(fetchedOrders));
 
             setProducts(await fetchProducts())
-
         })();
-    }, [orders]);
-
-    function getPurchaseHistory(): PurchaseHistoryProduct[] { return orders; }
+    }, []);
 
     function addProductsToPurchaseHistory(products: CartProduct[]): string {
 
         const newOrder : {} = products.map(product => ({
             product_id: product.id,
             quantity: product.quantity,
-            price: (product.price * product.quantity) / 100,
+            price: product.price,
         }));
 
         createOrder(newOrder).then((res: any) => {
             const data = res.data
 
-            console.log(res)
-
             const order = data.orderItems.map((item: any) => ({
                 id: data.order.id,
-                product_id: item.id,
+                product_id: item.product_id,
                 price: item.price,
                 quantity: item.quantity
             }));
 
-            setOrders([...orders, order])
+            console.log(order.price)
+
+            setOrders(prevOrders => {
+                const updatedOrders = [...prevOrders, ...order];
+                localStorage.setItem("orders", JSON.stringify(updatedOrders));
+                return updatedOrders;
+            });
 
         });
 
-        return "Products bought with success."; /* example of when the button buy is clicked */
+        return "Products bought with success.";
     }
 
-    function getProductsFromPurchaseHistory(): Product[] {
-        const productsFromPurchaseHistory = orders.map(boughtProduct => {
-                return products.find(product => product.id === boughtProduct.product_id)
+    function getProductsFromPurchaseHistory() {
+        return orders.map(boughtProduct => {
+                const boughtProductInfo = products.find(product => product.id === boughtProduct.product_id);
+                return {
+                    title: boughtProductInfo?.title,
+                    image_url: boughtProductInfo?.image_url,
+                    quantity: boughtProduct.quantity,
+                    price: boughtProduct.price
+                }
             }
-        ).filter(Boolean) as Product[];
-
-        return productsFromPurchaseHistory || [];
+        );
     }
-
 
     return (
-        <PurchaseHistoryContext.Provider value={{ getPurchaseHistory, addProductsToPurchaseHistory, getProductsFromPurchaseHistory }}>
+        <PurchaseHistoryContext.Provider value={{ orders, addProductsToPurchaseHistory, getProductsFromPurchaseHistory }}>
             {children}
         </PurchaseHistoryContext.Provider>
     )

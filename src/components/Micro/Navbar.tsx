@@ -12,7 +12,6 @@ function Navbar() {
 
     const { token, signOut } = useContext(AuthContext)
     const { getCart, getCartProducts } = useContext(CartContext);
-    const { getPurchaseHistory } = useContext(PurchaseHistoryContext);
     const [showCartModal, setShowCartModal] = useState(false);
     const [showPurchaseHistoryModal, setShowPurchaseHistoryModal] = useState(false);
     const [cartProducts, setCartProducts] = useState<Product[]>([])
@@ -28,7 +27,7 @@ function Navbar() {
     useEffect(() => {
         const products = getCartProducts()
         setCartProducts(products)
-    }, [getPurchaseHistory, getCartProducts]);
+    }, [getCartProducts]);
 
 
     return (
