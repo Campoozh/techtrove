@@ -5,14 +5,17 @@ import {Bag, XLg} from "react-bootstrap-icons";
 import {CartModalProps} from "../../types/Cart";
 import {PurchaseHistoryContext} from "../../contexts/PurchaseHistoryContext";
 import {CartProduct} from "../../types/Product";
+import {useNavigate} from "react-router-dom";
 
 function CartModal({cart, products, show, handleClose}: CartModalProps) {
 
     const { updateProductQuantity, removeProductFromCart, resetCart } = useContext(CartContext);
     const { addProductsToPurchaseHistory } = useContext(PurchaseHistoryContext);
+    const navigate = useNavigate();
     const handleRemoveProductFromCart = (productId: string) => { removeProductFromCart(productId); }
     const handleProductQuantityUpdate = (productId: string, quantity: number, price: number) => { updateProductQuantity(productId, quantity, price); }
     const buyProducts = (products: CartProduct[]) => {
+        if(!localStorage.getItem('token')) return navigate('/login')
         addProductsToPurchaseHistory(products);
         resetCart();
     }
@@ -49,7 +52,6 @@ function CartModal({cart, products, show, handleClose}: CartModalProps) {
                                                    onChange={event =>
                                                        handleProductQuantityUpdate(product.id, Number(event.target.value), Number(product.price))}
                                             />
-                                            -
                                             <p>${cartItem?.price}</p>
                                         </div>
                                         <div className="d-flex align-items-center px-3">

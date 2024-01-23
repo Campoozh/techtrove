@@ -1,9 +1,10 @@
-import {CartProduct, Product} from "./Product";
+import {CartProduct} from "./Product";
 
 type PurchaseHistoryContextType = {
     orders: any,
     addProductsToPurchaseHistory: (products: CartProduct[]) => string,
     getProductsFromPurchaseHistory: () => any,
+    resetPurchaseHistory: () => void,
 };
 
 type PurchaseHistoryProduct = {

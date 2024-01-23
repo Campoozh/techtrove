@@ -17,19 +17,20 @@ export function PurchaseHistoryContextProvider({children}: ContextProviderProps)
 
     useEffect(() => {
         (async () => {
-            const fetchedOrders = await fetchOrdersByUser().then(res => {
-                return res.orders.flatMap((order: any) =>
-                    order.orderItem.map((item: any) => ({
-                        id: order.id,
-                        product_id: item.product_id,
-                        price: item.price / 100,
-                        quantity: item.quantity
-                    }))
-                );
-            });
+            if (localStorage.getItem('token')) {
+                const fetchedOrders = await fetchOrdersByUser().then(res => {
+                    return res.orders.flatMap((order: any) =>
+                        order.orderItem.map((item: any) => ({
+                            id: order.id,
+                            product_id: item.product_id,
+                            price: item.price / 100,
+                            quantity: item.quantity
+                        }))
+                    );
+                });
 
-            localStorage.setItem("orders", JSON.stringify(fetchedOrders));
-
+                localStorage.setItem("orders", JSON.stringify(fetchedOrders));
+            }
             setProducts(await fetchProducts())
         })();
     }, []);
@@ -51,8 +52,6 @@ export function PurchaseHistoryContextProvider({children}: ContextProviderProps)
                 price: item.price,
                 quantity: item.quantity
             }));
-
-            console.log(order.price)
 
             setOrders(prevOrders => {
                 const updatedOrders = [...prevOrders, ...order];
@@ -78,8 +77,12 @@ export function PurchaseHistoryContextProvider({children}: ContextProviderProps)
         );
     }
 
+    function resetPurchaseHistory() {
+        localStorage.removeItem('orders');
+    }
+
     return (
-        <PurchaseHistoryContext.Provider value={{ orders, addProductsToPurchaseHistory, getProductsFromPurchaseHistory }}>
+        <PurchaseHistoryContext.Provider value={{ orders, resetPurchaseHistory, addProductsToPurchaseHistory, getProductsFromPurchaseHistory }}>
             {children}
         </PurchaseHistoryContext.Provider>
     )

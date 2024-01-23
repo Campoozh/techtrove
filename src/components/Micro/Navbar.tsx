@@ -5,7 +5,6 @@ import {Cart, CartCheck, DoorOpen, Person} from "react-bootstrap-icons";
 import {CartContext} from "../../contexts/CartContext";
 import CartModal from "./CartModal";
 import {Product} from "../../types/Product";
-import {PurchaseHistoryContext} from "../../contexts/PurchaseHistoryContext";
 import PurchaseHistoryModal from "./PurchaseHistoryModal";
 
 function Navbar() {
@@ -16,6 +15,7 @@ function Navbar() {
     const [showPurchaseHistoryModal, setShowPurchaseHistoryModal] = useState(false);
     const [cartProducts, setCartProducts] = useState<Product[]>([])
     const navigate = useNavigate();
+
     const logout = () => {
         signOut()
         window.location.reload()
@@ -23,12 +23,10 @@ function Navbar() {
     }
     const cart = getCart();
 
-
     useEffect(() => {
         const products = getCartProducts()
         setCartProducts(products)
     }, [getCartProducts]);
-
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">

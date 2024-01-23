@@ -37,8 +37,8 @@ function App() {
           <section className="py-5">
               <div className="container px-4 px-lg-5 mt-5">
                   <div className="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                      {products.map(product => (
-                          <div className="col mb-5">
+                      {products.map((product, index) => (
+                          <div key={index} className="col mb-5">
                               <div className="card h-100">
                                   <img className="card-img-top" src={product.image_url} alt="..."/>
                                   <div className="card-body p-4">

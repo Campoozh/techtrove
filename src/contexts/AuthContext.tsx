@@ -4,11 +4,13 @@ import { AuthContextType, AuthProps } from "../types/Auth";
 import {CartContext} from "./CartContext";
 import {ContextProviderProps} from "../types/Context";
 import {AuthMessages} from "../api/Error/AuthMessages";
+import {PurchaseHistoryContext} from "./PurchaseHistoryContext";
 
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthContextProvider({ children }: ContextProviderProps) {
 
+    const {resetPurchaseHistory} = useContext(PurchaseHistoryContext);
     const [responseMessage, setResponseMessage] = useState('');
     const [token, setToken] = useState(localStorage.getItem('token') || '')
     const {resetCart} = useContext(CartContext)
@@ -68,6 +70,7 @@ export function AuthContextProvider({ children }: ContextProviderProps) {
 
     async function signOut() {
         resetCart()
+        resetPurchaseHistory()
         localStorage.removeItem('token');
     }
 
