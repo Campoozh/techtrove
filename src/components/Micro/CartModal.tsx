@@ -32,9 +32,7 @@ function CartModal({cart, products, show, handleClose}: CartModalProps) {
                 </Modal.Header>
                 <Modal.Body>
                     {products.length > 0 ? products.map(((product, index) => {
-
                                 const cartItem = cart.find(cartProduct => cartProduct.id === product.id);
-                                const totalPrice = (cartItem?.price || 0) * (cartItem?.quantity || 0);
 
                                 return (
                                     <div className="d-flex justify-content-between my-3">
@@ -52,7 +50,7 @@ function CartModal({cart, products, show, handleClose}: CartModalProps) {
                                                        handleProductQuantityUpdate(product.id, Number(event.target.value), Number(product.price))}
                                             />
                                             -
-                                            <p>${totalPrice}</p>
+                                            <p>${cartItem?.price}</p>
                                         </div>
                                         <div className="d-flex align-items-center px-3">
                                             <button type="button" className="btn btn-outline-dark" id="clearFilter"

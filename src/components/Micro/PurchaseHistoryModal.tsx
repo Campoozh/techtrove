@@ -12,19 +12,13 @@ function PurchaseHistoryModal({show, handleClose}: PurchaseHistoryModalProps) {
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        setPurchasedProducts(getProductsFromPurchaseHistory());
-        setPurchasedHistory(getPurchaseHistory());
+
+        setPurchasedProducts(getProductsFromPurchaseHistory()); // products in cart
+        setPurchasedHistory(getPurchaseHistory()); // info (img, category, etc) of products in carts
+
     }, [getProductsFromPurchaseHistory, getPurchaseHistory]);
 
-    function formatDate(dateString: string) {
-        const date = new Date(dateString);
-
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-
-        return `${day}/${month}/${year}`;
-    }
+    console.log(purchasedProducts)
 
     return (
         <>
@@ -54,10 +48,7 @@ function PurchaseHistoryModal({show, handleClose}: PurchaseHistoryModalProps) {
                                 product.title.toUpperCase().includes(searchTerm.toUpperCase())
                             )
                             .map(((product, index) => {
-                                const purchasedHistoryItem = purchasedHistory.find(purchasedHistoryProduct => purchasedHistoryProduct.id === product.id);
-
-                                let boughtAt = ''
-                                if (purchasedHistoryItem?.bought_at) boughtAt = formatDate(purchasedHistoryItem?.bought_at)
+                                const purchasedHistoryItem = purchasedHistory.find(purchasedHistoryProduct => purchasedHistoryProduct.product_id === product.id);
 
                                 return (
                                     <div key={product.id} className="d-flex justify-content-between my-3">
@@ -68,8 +59,8 @@ function PurchaseHistoryModal({show, handleClose}: PurchaseHistoryModalProps) {
                                             {product.title}
                                             <p>Quantity: {purchasedHistoryItem?.quantity} pieces</p>
                                         </div>
-                                        <div className="d-flex align-items-center px-3">
-                                            {boughtAt}
+                                        <div className="d-flex align-items-center justify-content-start px-3">
+                                           Total: ${purchasedHistoryItem?.price}
                                         </div>
                                     </div>
                                 )

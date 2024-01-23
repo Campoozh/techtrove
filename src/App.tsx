@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {fetchProducts} from "./api/product";
 import {Product} from "./types/Product";
 import {Link} from "react-router-dom";

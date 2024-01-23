@@ -7,9 +7,10 @@ type PurchaseHistoryContextType = {
 };
 
 type PurchaseHistoryProduct = {
-    id: string,
+    order_id: string,
+    product_id: string,
     quantity: number,
-    bought_at: string,
+    price: number,
 }
 
 type PurchaseHistoryModalProps = {

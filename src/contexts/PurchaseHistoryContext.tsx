@@ -4,61 +4,76 @@ import {ContextProviderProps} from "../types/Context";
 import {CartProduct, Product} from "../types/Product";
 import {fetchProducts} from "../api/product";
 import {createOrder, fetchOrdersByUser} from "../api/orders";
-import {Cart} from "react-bootstrap-icons";
 
 export const PurchaseHistoryContext = createContext({} as PurchaseHistoryContextType)
 
 export function PurchaseHistoryContextProvider({children}: ContextProviderProps) {
 
-    /*
-    *  Local Storage porque aparentemente não é possível conseguir
-    *  o ID do user
-    * */
-
-    const localStoragePurchaseHistory = localStorage.getItem('purchaseHistory')
+    const localStoragePurchaseHistory = localStorage.getItem('orders')
     const [products, setProducts] = useState<Product[]>([])
-    const [purchaseHistory, setPurchaseHistory] = useState<PurchaseHistoryProduct[]>(
+    const [orders, setOrders] = useState<PurchaseHistoryProduct[]>(
         localStoragePurchaseHistory ? JSON.parse(localStoragePurchaseHistory) : []
     )
 
     useEffect(() => {
-        localStorage.setItem("purchaseHistory", JSON.stringify(purchaseHistory));
-        (async () =>
-                setProducts(await fetchProducts())
-        )();
-    }, [purchaseHistory]);
+        (async () => {
 
+            const fetchedOrders = await fetchOrdersByUser().then(res => {
+                return res.orders.flatMap((order: any) =>
+                    order.orderItem.map((item: any) => ({
+                        id: order.id,
+                        product_id: item.product_id,
+                        price: item.price,
+                        quantity: item.quantity
+                    }))
+                );
+            });
 
-    function getPurchaseHistory(): PurchaseHistoryProduct[] { return purchaseHistory; }
+            localStorage.setItem("orders", JSON.stringify(fetchedOrders));
+
+            setProducts(await fetchProducts())
+
+        })();
+    }, [orders]);
+
+    function getPurchaseHistory(): PurchaseHistoryProduct[] { return orders; }
 
     function addProductsToPurchaseHistory(products: CartProduct[]): string {
-        const newPurchaseHistory: PurchaseHistoryProduct[] = [
-            ...purchaseHistory,
-            ...products.map(product => {
-                return { id: product.id, quantity: product.quantity, bought_at: new Date().toLocaleString() }
-            })
-        ]
 
         const newOrder : {} = products.map(product => ({
             product_id: product.id,
             quantity: product.quantity,
-            price: product.price
+            price: (product.price * product.quantity) / 100,
         }));
 
-        createOrder(newOrder).then(res => console.log(res));
+        createOrder(newOrder).then((res: any) => {
+            const data = res.data
 
-        setPurchaseHistory(newPurchaseHistory)
+            console.log(res)
+
+            const order = data.orderItems.map((item: any) => ({
+                id: data.order.id,
+                product_id: item.id,
+                price: item.price,
+                quantity: item.quantity
+            }));
+
+            setOrders([...orders, order])
+
+        });
+
         return "Products bought with success."; /* example of when the button buy is clicked */
     }
 
     function getProductsFromPurchaseHistory(): Product[] {
-        const productsFromPurchaseHistory = purchaseHistory.map(productInCart => {
-                return products.find(product => product.id === productInCart.id)
+        const productsFromPurchaseHistory = orders.map(boughtProduct => {
+                return products.find(product => product.id === boughtProduct.product_id)
             }
         ).filter(Boolean) as Product[];
 
         return productsFromPurchaseHistory || [];
     }
+
 
     return (
         <PurchaseHistoryContext.Provider value={{ getPurchaseHistory, addProductsToPurchaseHistory, getProductsFromPurchaseHistory }}>

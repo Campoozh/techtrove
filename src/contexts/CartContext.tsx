@@ -32,7 +32,7 @@ export function CartContextProvider({children}: ContextProviderProps) {
 
     function addProductToCart(productId: string, quantity: number, price: number): string  {
         if (!isProductInCart(productId)) {
-            setCart([...cart, { id: productId, quantity: quantity, price: price }]);
+            setCart([...cart, { id: productId, quantity: quantity, price: price * quantity }]);
             return "Product added to cart successfully."
         } else return "Product already in cart."
     }
@@ -47,7 +47,7 @@ export function CartContextProvider({children}: ContextProviderProps) {
     function updateProductQuantity(productId: string, newQuantity: number, newPrice: number): string {
         if (isProductInCart(productId)) {
             const updatedCart = cart.map(product =>
-                product.id === productId ? { id: productId, quantity: newQuantity, price: newPrice } : product
+                product.id === productId ? { id: productId, quantity: newQuantity, price: newPrice * newQuantity } : product
             )
             setCart(updatedCart);
             return "Product updated successfully"
